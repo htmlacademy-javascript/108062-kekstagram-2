@@ -1,5 +1,7 @@
 const checkStringLength = (string = '', maxLength = 1) => string.length <= maxLength;
 
+checkStringLength();
+
 // console.log(checkStringLength())
 // console.log(checkStringLength('Магнитогорск', 11))
 // console.log(checkStringLength('Магнитогорск', 12))
@@ -11,11 +13,13 @@ const checkStringPalindrome = (string = '') => {
   let reversedString = '';
 
   for (let i = normalisedString.length - 1; i >= 0; i--) {
-    reversedString+= normalisedString[i];
+    reversedString += normalisedString[i];
   }
 
   return reversedString === normalisedString;
 };
+
+checkStringPalindrome();
 
 // console.log(checkStringPalindrome())
 // console.log(checkStringPalindrome('Коту тащат уток'))
@@ -34,7 +38,9 @@ const extractNambers = (string = '') => {
   }
 
   return result === '' ? NaN : Number(result);
-}
+};
+
+extractNambers();
 
 // console.log(extractNambers())
 // console.log(extractNambers(''))
