@@ -5,7 +5,6 @@ const checkStringLength = (string = '', maxLength = 1) => string.length <= maxLe
 // console.log(checkStringLength('Магнитогорск', 12))
 // console.log(checkStringLength('Магнитогорск', 13))
 
-
 const checkStringPalindrome = (string = '') => {
   const normalisedString = string.replaceAll(' ', '').toLowerCase();
 
@@ -45,6 +44,3 @@ const extractNambers = (string = '') => {
 // console.log(extractNambers('-25.56'))
 // console.log(extractNambers(-32.82))
 // console.log(extractNambers('а я томат'))
-
-
-
