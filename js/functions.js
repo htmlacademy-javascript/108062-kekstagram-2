@@ -26,7 +26,7 @@ checkStringPalindrome();
 // console.log(checkStringPalindrome('Лёша на Полке клопа наШёл '))
 // console.log(checkStringPalindrome('Это не палиндром'))
 
-const extractNambers = (string = '') => {
+const extractNumbers = (string = '') => {
   let result = '';
 
   string = string.toString();
@@ -40,13 +40,13 @@ const extractNambers = (string = '') => {
   return result === '' ? NaN : Number(result);
 };
 
-extractNambers();
+extractNumbers();
 
-// console.log(extractNambers())
-// console.log(extractNambers(''))
-// console.log(extractNambers('текст 10'))
-// console.log(extractNambers('-8'))
-// console.log(extractNambers('22.5'))
-// console.log(extractNambers('-25.56'))
-// console.log(extractNambers(-32.82))
-// console.log(extractNambers('а я томат'))
+// console.log(extractNumbers())
+// console.log(extractNumbers(''))
+// console.log(extractNumbers('текст 10'))
+// console.log(extractNumbers('-8'))
+// console.log(extractNumbers('22.5'))
+// console.log(extractNumbers('-25.56'))
+// console.log(extractNumbers(-32.82))
+// console.log(extractNumbers('а я томат'))
