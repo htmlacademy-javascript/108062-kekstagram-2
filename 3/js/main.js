@@ -96,6 +96,6 @@ const createPhotosArray = () => {
   return photosArray;
 };
 
-createPhotosArray();
+// createPhotosArray();
 
-// console.log(createPhotosArray());
+console.log(createPhotosArray());
