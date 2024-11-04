@@ -1,6 +1,10 @@
-import './upload-img.js';
-import './redact-img.js';
-import './send-data.js';
-import './view-img.js';
-import './filter-img.js';
-import './thumbnails.js';
+import {containerPictures} from './thumbnails.js';
+import {openBigPicture} from './big-pictures.js';
+
+containerPictures.addEventListener('click', (evt) => {
+  const currentPicture = evt.target.closest('.picture');
+
+  if (currentPicture) {
+    openBigPicture(currentPicture.dataset.pictureId);
+  }
+});

@@ -87,5 +87,6 @@ const createDescriptionPhoto = () => ({
 // Создание массива с описанием фото.
 
 const createPhotosArray = () => Array.from({ length: PHOTO_ID_COUNT }, createDescriptionPhoto);
+const photos = createPhotosArray();
 
-export {createPhotosArray};
+export {photos};

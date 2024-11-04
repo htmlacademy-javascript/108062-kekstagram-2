@@ -1,16 +1,17 @@
-import {createPhotosArray} from './data.js';
+import {photos} from './data.js';
 
 const templatePicture = document.querySelector('#picture').content.querySelector('.picture');
 const containerPictures = document.querySelector('.pictures');
 const picturesFragment = document.createDocumentFragment();
 
-createPhotosArray().forEach((photo) => {
+photos.forEach(({id, url, description, comments, likes}) => {
   const image = templatePicture.querySelector('.picture__img');
 
-  image.src = photo.url;
-  image.alt = photo.description;
-  templatePicture.querySelector('.picture__comments').textContent = photo.comments.length;
-  templatePicture.querySelector('.picture__likes').textContent = photo.likes;
+  templatePicture.dataset.pictureId = id;
+  image.src = url;
+  image.alt = description;
+  templatePicture.querySelector('.picture__comments').textContent = comments.length;
+  templatePicture.querySelector('.picture__likes').textContent = likes;
 
   const thumbnail = templatePicture.cloneNode(true);
 
@@ -18,3 +19,5 @@ createPhotosArray().forEach((photo) => {
 });
 
 containerPictures.append(picturesFragment);
+
+export {containerPictures};
