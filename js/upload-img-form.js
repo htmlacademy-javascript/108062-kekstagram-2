@@ -1,4 +1,5 @@
 import {isEscapeKey} from './utils.js';
+import {onEffectsChange} from './img-effects-slider.js';
 
 const uploadForm = document.querySelector('.img-upload__form');
 const uploadFileInput = uploadForm.querySelector('#upload-file');
@@ -6,12 +7,19 @@ const imgEditorForm = uploadForm.querySelector('.img-upload__overlay');
 const imgEditorResetBtn = imgEditorForm.querySelector('#upload-cancel');
 const hashtagInput = uploadForm.querySelector('.text__hashtags');
 const commentInput = uploadForm.querySelector('.text__description');
+const imgScaleSmaller = uploadForm.querySelector('.scale__control--smaller');
+const imgScaleBigger = uploadForm.querySelector('.scale__control--bigger');
+const img = uploadForm.querySelector('.img-upload__preview img');
+const scaleControl = uploadForm.querySelector('.scale__control--value');
+const effects = document.querySelector('.effects');
 
 const MAX_COMMENT_SYMBOLS = 140;
 const MAX_HASHTAG_SYMBOLS = 20;
 const MAX_HASHTAGS = 5;
+const SCALE_STEP = 0.25;
 
 let errorMessage = '';
+let imgScale = 1;
 
 const error = () => errorMessage;
 
@@ -135,7 +143,26 @@ pristine.addValidator (
   `длина комментария не может составлять больше ${MAX_COMMENT_SYMBOLS} символов`
 );
 
+const onImgScaleSmallerClick = () => {
+  if (imgScale > SCALE_STEP) {
+    imgScale -= SCALE_STEP;
+    img.style.transform = `scale(${imgScale})`;
+    scaleControl.value = `${imgScale * 100}%`;
+  }
+};
+
+const onImgScaleBiggerClick = () => {
+  if (imgScale < 1) {
+    imgScale += SCALE_STEP;
+    img.style.transform = `scale(${imgScale})`;
+    scaleControl.value = `${imgScale * 100}%`;
+  }
+};
+
 hashtagInput.addEventListener('input', onHashtagInput);
 uploadForm.addEventListener('submit', onUploadFormSubmit);
+imgScaleSmaller.addEventListener('click', onImgScaleSmallerClick);
+imgScaleBigger.addEventListener('click', onImgScaleBiggerClick);
+effects.addEventListener('change', onEffectsChange);
 
 export {openUploadModal};
