@@ -1,4 +1,4 @@
-import {photos} from './data.js';
+// import {photos} from './data.js';
 import {isEscapeKey} from './utils.js';
 import {clearComments, renderComments} from './comments.js';
 

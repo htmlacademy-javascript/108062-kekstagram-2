@@ -46,6 +46,7 @@ function closeImgEditor () {
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
   imgEditorResetBtn.removeEventListener('click', onImgEditorResetBtnClick);
+  effects.removeEventListener('change', onEffectsChange);
   uploadFileInput.value = '';
 }
 
@@ -55,6 +56,7 @@ const openUploadModal = () => {
     document.body.classList.add('modal-open');
     document.addEventListener('keydown', onDocumentKeydown);
     imgEditorResetBtn.addEventListener('click', onImgEditorResetBtnClick);
+    effects.addEventListener('change', onEffectsChange);
   });
 };
 
@@ -64,14 +66,23 @@ const pristine = new Pristine(uploadForm, {
   errorTextClass: 'img-upload__field-wrapper--error'
 });
 
-const onUploadFormSubmit = (evt) => {
+uploadForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
 
   if (pristine.validate()) {
     hashtagInput.value = hashtagInput.value.trim().replaceAll(/\s+/g, ' ');
-    uploadForm.submit();
+    // uploadForm.submit();
+    const formData = new FormData(evt.target);
+
+    fetch(
+      'https://31.javascript.htmlacademy.pro/kekstagram',
+      {
+        method: 'POST',
+        body: formData,
+      },
+    )
   }
-};
+});
 
 const isHashtagsValid = (value) => {
   errorMessage = '';
@@ -160,9 +171,8 @@ const onImgScaleBiggerClick = () => {
 };
 
 hashtagInput.addEventListener('input', onHashtagInput);
-uploadForm.addEventListener('submit', onUploadFormSubmit);
+// uploadForm.addEventListener('submit', onUploadFormSubmit);
 imgScaleSmaller.addEventListener('click', onImgScaleSmallerClick);
 imgScaleBigger.addEventListener('click', onImgScaleBiggerClick);
-effects.addEventListener('change', onEffectsChange);
 
 export {openUploadModal};
