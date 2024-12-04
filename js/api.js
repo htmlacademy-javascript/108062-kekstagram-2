@@ -15,11 +15,23 @@ const ErrorText = {
   [Method.POST]: 'Не удалось отправить данные формы.',
 };
 
-const load = (route, method = Method.GET, body = null) => {
-  fetch(`${BASE_URL}${route}`, { method, body })
-    .then((response) =>
-      response.ok ? response.json() : Promise.reject({ message: ErrorText[method], status: response.status }));
-};
+const load = (route, errorText, method = Method.GET, body = null) =>
+  fetch(`${BASE_URL}${route}`, {method, body})
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error();
+      }
+      return response.json();
+    })
+    .catch(() => {
+      throw new Error(errorText);
+    });
+
+// const load = (route, method = Method.GET, body = null) => {
+//   fetch(`${BASE_URL}${route}`, { method, body })
+//     .then((response) =>
+//       response.ok ? response.json() : Promise.reject({ message: ErrorText[method], status: response.status }));
+// };
 
 const getData = () => load(Route.GET_DATA);
 

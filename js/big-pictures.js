@@ -1,6 +1,7 @@
 // import {photos} from './data.js';
 import {isEscapeKey} from './utils.js';
 import {clearComments, renderComments} from './comments.js';
+import {getData} from './api.js';
 
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureImg = bigPicture.querySelector('.big-picture__img').querySelector('img');
@@ -30,13 +31,16 @@ function closeBigPicture () {
 }
 
 const openBigPicture = (pictureId) => {
-  const currentPhoto = photos.find((photo) => photo.id === Number(pictureId));
+  getData()
+    .then((photos) => {
+      const currentPhoto = photos.find((photo) => photo.id === Number(pictureId));
 
-  bigPictureImg.src = currentPhoto.url;
-  likesCount.textContent = currentPhoto.likes;
-  commentsCaption.textContent = currentPhoto.description;
+      bigPictureImg.src = currentPhoto.url;
+      likesCount.textContent = currentPhoto.likes;
+      commentsCaption.textContent = currentPhoto.description;
 
-  renderComments(currentPhoto.comments);
+      renderComments(currentPhoto.comments);
+    });
 
   bigPicture.classList.remove('hidden');
   bigPictureCancel.addEventListener('click', onBigPictureCancelClick);

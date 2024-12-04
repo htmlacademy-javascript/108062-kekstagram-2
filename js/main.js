@@ -1,7 +1,7 @@
 import {containerPictures, renderPhotos} from './thumbnails.js';
 import {openBigPicture} from './big-pictures.js';
-import {openUploadModal} from './upload-img-form.js';
-import {getData, sendData} from './api.js';
+import {openUploadModal, setUploadFormSubmit, closeImgEditor} from './upload-img-form.js';
+import './api.js';
 
 containerPictures.addEventListener('click', (evt) => {
   const currentPicture = evt.target.closest('.picture');
@@ -19,3 +19,4 @@ fetch('https://31.javascript.htmlacademy.pro/kekstagram/data')
   })
 
 openUploadModal();
+setUploadFormSubmit(closeImgEditor);
