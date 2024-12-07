@@ -1,7 +1,7 @@
-import {isEscapeKey, showErrorMessage} from './utils.js';
+import {isEscapeKey} from './utils.js';
 import {onEffectsChange} from './img-effects-slider.js';
 import {sendData} from './api.js';
-// import {appendNotification} from './notification.js';
+import {appendNotification} from './notification.js';
 
 const uploadForm = document.querySelector('.img-upload__form');
 const uploadFileInput = uploadForm.querySelector('#upload-file');
@@ -15,8 +15,8 @@ const img = uploadForm.querySelector('.img-upload__preview img');
 const scaleControl = uploadForm.querySelector('.scale__control--value');
 const imgUploadSubmitButton = uploadForm.querySelector('.img-upload__submit');
 const effects = document.querySelector('.effects');
-// const templateSuccess = document.querySelector('#success').content;
-// const templateError = document.querySelector('#error').content;
+const templateSuccess = document.querySelector('#success').content;
+const templateError = document.querySelector('#error').content;
 
 const MAX_COMMENT_SYMBOLS = 140;
 const MAX_HASHTAG_SYMBOLS = 20;
@@ -52,7 +52,7 @@ function closeImgEditor () {
   document.removeEventListener('keydown', onDocumentKeydown);
   imgEditorResetBtn.removeEventListener('click', onImgEditorResetBtnClick);
   effects.removeEventListener('change', onEffectsChange);
-  uploadFileInput.value = '';
+  uploadForm.reset();
 }
 
 const openUploadModal = () => {
@@ -81,7 +81,7 @@ const unblockSubmitButton = () => {
   imgUploadSubmitButton.textContent = 'Опубликовать';
 };
 
-const setUploadFormSubmit = (onSuccess) => {
+const setUploadFormSubmit = () => {
   uploadForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
@@ -89,11 +89,23 @@ const setUploadFormSubmit = (onSuccess) => {
       hashtagInput.value = hashtagInput.value.trim().replaceAll(/\s+/g, ' ');
       blockSubmitButton();
 
+      // sendData(new FormData(evt.target))
+      //   .then(onSuccess)
+      //   .catch(
+      //     (err) => {
+      //       showErrorMessage(err.message);
+      //     }
+      //   )
+      //   .finally(unblockSubmitButton);
+
       sendData(new FormData(evt.target))
-        .then(onSuccess)
+        .then(
+          () => {
+            appendNotification(templateSuccess, () => closeImgEditor());
+          })
         .catch(
-          (err) => {
-            showErrorMessage(err.message);
+          () => {
+            appendNotification(templateError);
           }
         )
         .finally(unblockSubmitButton);

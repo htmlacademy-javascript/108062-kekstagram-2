@@ -5,8 +5,7 @@ const body = document.querySelector('body');
 const closeNotification = (evt) => {
   evt.stopPropagation();
   const existElement = document.querySelector('.success') || document.querySelector('.error');
-  // const closeButton = existElement.querySelector('.success__button') || existElement.querySelector('.error__button');
-  const closeButton = existElement.querySelector('button');
+  const closeButton = existElement.querySelector('.success__button') || existElement.querySelector('.error__button');
 
   if (evt.target === existElement || evt.target === closeButton || isEscapeKey(evt)) {
     existElement.remove();
@@ -23,4 +22,4 @@ const appendNotification = (template, trigger = null) => {
   body.addEventListener('keydown', closeNotification);
 };
 
-export {closeNotification, appendNotification};
+export {appendNotification};
