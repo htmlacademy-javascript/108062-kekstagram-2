@@ -1,5 +1,7 @@
 import {isEscapeKey, showErrorMessage} from './utils.js';
 import {onEffectsChange} from './img-effects-slider.js';
+import {sendData} from './api.js';
+// import {appendNotification} from './notification.js';
 
 const uploadForm = document.querySelector('.img-upload__form');
 const uploadFileInput = uploadForm.querySelector('#upload-file');
@@ -13,6 +15,8 @@ const img = uploadForm.querySelector('.img-upload__preview img');
 const scaleControl = uploadForm.querySelector('.scale__control--value');
 const imgUploadSubmitButton = uploadForm.querySelector('.img-upload__submit');
 const effects = document.querySelector('.effects');
+// const templateSuccess = document.querySelector('#success').content;
+// const templateError = document.querySelector('#error').content;
 
 const MAX_COMMENT_SYMBOLS = 140;
 const MAX_HASHTAG_SYMBOLS = 20;
@@ -69,13 +73,13 @@ const pristine = new Pristine(uploadForm, {
 
 const blockSubmitButton = () => {
   imgUploadSubmitButton.disabled = true;
-  imgUploadSubmitButton.textContent = 'Публикую...'
-}
+  imgUploadSubmitButton.textContent = 'Публикую...';
+};
 
 const unblockSubmitButton = () => {
   imgUploadSubmitButton.disabled = false;
-  imgUploadSubmitButton.textContent = 'Опубликовать'
-}
+  imgUploadSubmitButton.textContent = 'Опубликовать';
+};
 
 const setUploadFormSubmit = (onSuccess) => {
   uploadForm.addEventListener('submit', (evt) => {
@@ -84,27 +88,15 @@ const setUploadFormSubmit = (onSuccess) => {
     if (pristine.validate()) {
       hashtagInput.value = hashtagInput.value.trim().replaceAll(/\s+/g, ' ');
       blockSubmitButton();
-      // uploadForm.submit();
-      const formData = new FormData(evt.target);
 
-      fetch(
-        'https://31.javascript.htmlacademy.pro/kekstagram/',
-        {
-          method: 'POST',
-          body: formData,
-        },
-      )
-      .then((response) => {
-        if (response.ok) {
-          onSuccess();
-          unblockSubmitButton();
-        } else {
-          showErrorMessage();
-        }
-      })
-      .catch(() => {
-        showErrorMessage();
-      });
+      sendData(new FormData(evt.target))
+        .then(onSuccess)
+        .catch(
+          (err) => {
+            showErrorMessage(err.message);
+          }
+        )
+        .finally(unblockSubmitButton);
     }
   });
 };
@@ -196,7 +188,6 @@ const onImgScaleBiggerClick = () => {
 };
 
 hashtagInput.addEventListener('input', onHashtagInput);
-// uploadForm.addEventListener('submit', onUploadFormSubmit);
 imgScaleSmaller.addEventListener('click', onImgScaleSmallerClick);
 imgScaleBigger.addEventListener('click', onImgScaleBiggerClick);
 

@@ -27,14 +27,8 @@ const load = (route, errorText, method = Method.GET, body = null) =>
       throw new Error(errorText);
     });
 
-// const load = (route, method = Method.GET, body = null) => {
-//   fetch(`${BASE_URL}${route}`, { method, body })
-//     .then((response) =>
-//       response.ok ? response.json() : Promise.reject({ message: ErrorText[method], status: response.status }));
-// };
+const getData = () => load(Route.GET_DATA, ErrorText.GET);
 
-const getData = () => load(Route.GET_DATA);
-
-const sendData = (body) => load(Route.SEND_DATA, Method.POST, body);
+const sendData = (body) => load(Route.SEND_DATA, ErrorText.POST, Method.POST, body);
 
 export {getData, sendData};
