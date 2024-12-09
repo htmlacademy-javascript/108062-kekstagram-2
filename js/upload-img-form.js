@@ -1,5 +1,7 @@
 import {isEscapeKey} from './utils.js';
 import {onEffectsChange} from './img-effects-slider.js';
+import {sendData} from './api.js';
+import {appendNotification} from './notification.js';
 
 const uploadForm = document.querySelector('.img-upload__form');
 const uploadFileInput = uploadForm.querySelector('#upload-file');
@@ -11,7 +13,11 @@ const imgScaleSmaller = uploadForm.querySelector('.scale__control--smaller');
 const imgScaleBigger = uploadForm.querySelector('.scale__control--bigger');
 const img = uploadForm.querySelector('.img-upload__preview img');
 const scaleControl = uploadForm.querySelector('.scale__control--value');
+const imgUploadSubmitButton = uploadForm.querySelector('.img-upload__submit');
 const effects = document.querySelector('.effects');
+const templateSuccess = document.querySelector('#success').content;
+const templateError = document.querySelector('#error').content;
+const effectLevel = document.querySelector('.img-upload__effect-level');
 
 const MAX_COMMENT_SYMBOLS = 140;
 const MAX_HASHTAG_SYMBOLS = 20;
@@ -25,7 +31,6 @@ const error = () => errorMessage;
 
 const onImgEditorResetBtnClick = (evt) => {
   evt.preventDefault();
-  uploadForm.reset();
   closeImgEditor();
 };
 
@@ -35,7 +40,6 @@ const onDocumentKeydown = (evt) => {
     if (document.activeElement === hashtagInput || document.activeElement === commentInput) {
       evt.stopPropagation();
     } else {
-      uploadForm.reset();
       closeImgEditor();
     }
   }
@@ -46,7 +50,12 @@ function closeImgEditor () {
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
   imgEditorResetBtn.removeEventListener('click', onImgEditorResetBtnClick);
-  uploadFileInput.value = '';
+  effects.removeEventListener('change', onEffectsChange);
+  effectLevel.classList.add('hidden');
+  img.style.filter = 'none';
+  uploadForm.reset();
+  img.style.transform = `scale(${imgScale = 1})`;
+  scaleControl.value = `${imgScale * 100}%`;
 }
 
 const openUploadModal = () => {
@@ -55,6 +64,7 @@ const openUploadModal = () => {
     document.body.classList.add('modal-open');
     document.addEventListener('keydown', onDocumentKeydown);
     imgEditorResetBtn.addEventListener('click', onImgEditorResetBtnClick);
+    effects.addEventListener('change', onEffectsChange);
   });
 };
 
@@ -64,13 +74,37 @@ const pristine = new Pristine(uploadForm, {
   errorTextClass: 'img-upload__field-wrapper--error'
 });
 
-const onUploadFormSubmit = (evt) => {
-  evt.preventDefault();
+const blockSubmitButton = () => {
+  imgUploadSubmitButton.disabled = true;
+  imgUploadSubmitButton.textContent = 'Публикую...';
+};
 
-  if (pristine.validate()) {
-    hashtagInput.value = hashtagInput.value.trim().replaceAll(/\s+/g, ' ');
-    uploadForm.submit();
-  }
+const unblockSubmitButton = () => {
+  imgUploadSubmitButton.disabled = false;
+  imgUploadSubmitButton.textContent = 'Опубликовать';
+};
+
+const setUploadFormSubmit = () => {
+  uploadForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    if (pristine.validate()) {
+      hashtagInput.value = hashtagInput.value.trim().replaceAll(/\s+/g, ' ');
+      blockSubmitButton();
+
+      sendData(new FormData(evt.target))
+        .then(
+          () => {
+            appendNotification(templateSuccess, () => closeImgEditor());
+          })
+        .catch(
+          () => {
+            appendNotification(templateError);
+          }
+        )
+        .finally(unblockSubmitButton);
+    }
+  });
 };
 
 const isHashtagsValid = (value) => {
@@ -160,9 +194,7 @@ const onImgScaleBiggerClick = () => {
 };
 
 hashtagInput.addEventListener('input', onHashtagInput);
-uploadForm.addEventListener('submit', onUploadFormSubmit);
 imgScaleSmaller.addEventListener('click', onImgScaleSmallerClick);
 imgScaleBigger.addEventListener('click', onImgScaleBiggerClick);
-effects.addEventListener('change', onEffectsChange);
 
-export {openUploadModal};
+export {openUploadModal, closeImgEditor, setUploadFormSubmit};

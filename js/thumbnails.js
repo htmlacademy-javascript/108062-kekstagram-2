@@ -1,4 +1,5 @@
-import {photos} from './data.js';
+import {getData} from './api.js';
+import {showErrorMessage} from './utils.js';
 
 const templatePicture = document.querySelector('#picture').content.querySelector('.picture');
 const containerPictures = document.querySelector('.pictures');
@@ -6,6 +7,12 @@ const picturesFragment = document.createDocumentFragment();
 const image = templatePicture.querySelector('.picture__img');
 const pictureComments = templatePicture.querySelector('.picture__comments');
 const pictureLikes = templatePicture.querySelector('.picture__likes');
+
+const photos = await getData()
+  .then((data) => data)
+  .catch((err) => {
+    showErrorMessage(err.message);
+  });
 
 photos.forEach(({id, url, description, comments, likes}) => {
 
@@ -22,4 +29,4 @@ photos.forEach(({id, url, description, comments, likes}) => {
 
 containerPictures.append(picturesFragment);
 
-export {containerPictures};
+export {containerPictures, photos};
