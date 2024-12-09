@@ -17,6 +17,7 @@ const imgUploadSubmitButton = uploadForm.querySelector('.img-upload__submit');
 const effects = document.querySelector('.effects');
 const templateSuccess = document.querySelector('#success').content;
 const templateError = document.querySelector('#error').content;
+const effectLevel = document.querySelector('.img-upload__effect-level');
 
 const MAX_COMMENT_SYMBOLS = 140;
 const MAX_HASHTAG_SYMBOLS = 20;
@@ -30,7 +31,6 @@ const error = () => errorMessage;
 
 const onImgEditorResetBtnClick = (evt) => {
   evt.preventDefault();
-  uploadForm.reset();
   closeImgEditor();
 };
 
@@ -40,7 +40,6 @@ const onDocumentKeydown = (evt) => {
     if (document.activeElement === hashtagInput || document.activeElement === commentInput) {
       evt.stopPropagation();
     } else {
-      uploadForm.reset();
       closeImgEditor();
     }
   }
@@ -52,7 +51,11 @@ function closeImgEditor () {
   document.removeEventListener('keydown', onDocumentKeydown);
   imgEditorResetBtn.removeEventListener('click', onImgEditorResetBtnClick);
   effects.removeEventListener('change', onEffectsChange);
+  effectLevel.classList.add('hidden');
+  img.style.filter = 'none';
   uploadForm.reset();
+  img.style.transform = `scale(${imgScale = 1})`;
+  scaleControl.value = `${imgScale * 100}%`;
 }
 
 const openUploadModal = () => {
@@ -88,15 +91,6 @@ const setUploadFormSubmit = () => {
     if (pristine.validate()) {
       hashtagInput.value = hashtagInput.value.trim().replaceAll(/\s+/g, ' ');
       blockSubmitButton();
-
-      // sendData(new FormData(evt.target))
-      //   .then(onSuccess)
-      //   .catch(
-      //     (err) => {
-      //       showErrorMessage(err.message);
-      //     }
-      //   )
-      //   .finally(unblockSubmitButton);
 
       sendData(new FormData(evt.target))
         .then(
