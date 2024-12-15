@@ -22,7 +22,9 @@ const onFilterClick = (evt) => {
     return;
   }
   if (activeButton === targetButton) {
-    return;
+    if (targetButton.getAttribute('id') !== FILTER.random) {
+      return;
+    }
   }
   activeButton.classList.toggle(ACTIVE_BUTTON_CLASS);
   targetButton.classList.toggle(ACTIVE_BUTTON_CLASS);
@@ -35,21 +37,17 @@ function applyFilter () {
   let filteredPictures = [];
   switch (currentFilter) {
     case FILTER.default:
-      clearContainerPictures();
       filteredPictures = photos;
-      debounceRender(filteredPictures);
       break;
     case FILTER.random:
-      clearContainerPictures();
       filteredPictures = photos.toSorted(() => 0.5 - Math.random()).slice(0, RANDOM_PHOTOS_QUANTITY);
-      debounceRender(filteredPictures);
       break;
     case FILTER.discussed:
-      clearContainerPictures();
       filteredPictures = photos.toSorted((a, b) => b.comments.length - a.comments.length);
-      debounceRender(filteredPictures);
       break;
   }
+  clearContainerPictures();
+  debounceRender(filteredPictures);
 }
 
 const configFilter = () => {
