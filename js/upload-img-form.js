@@ -45,6 +45,11 @@ const onDocumentKeydown = (evt) => {
   }
 };
 
+const changeImgScale = () => {
+  img.style.transform = `scale(${imgScale})`;
+  scaleControl.value = `${imgScale * 100}%`;
+};
+
 function closeImgEditor () {
   imgEditorForm.classList.add('hidden');
   document.body.classList.remove('modal-open');
@@ -54,8 +59,7 @@ function closeImgEditor () {
   effectLevel.classList.add('hidden');
   img.style.filter = 'none';
   uploadForm.reset();
-  img.style.transform = `scale(${imgScale = 1})`;
-  scaleControl.value = `${imgScale * 100}%`;
+  changeImgScale(imgScale = 1);
 }
 
 const openUploadModal = () => {
@@ -180,16 +184,14 @@ pristine.addValidator (
 const onImgScaleSmallerClick = () => {
   if (imgScale > SCALE_STEP) {
     imgScale -= SCALE_STEP;
-    img.style.transform = `scale(${imgScale})`;
-    scaleControl.value = `${imgScale * 100}%`;
+    changeImgScale();
   }
 };
 
 const onImgScaleBiggerClick = () => {
   if (imgScale < 1) {
     imgScale += SCALE_STEP;
-    img.style.transform = `scale(${imgScale})`;
-    scaleControl.value = `${imgScale * 100}%`;
+    changeImgScale();
   }
 };
 

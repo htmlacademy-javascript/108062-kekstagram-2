@@ -14,19 +14,25 @@ const photos = await getData()
     showErrorMessage(err.message);
   });
 
-photos.forEach(({id, url, description, comments, likes}) => {
+const renderPhotos = (renderedPhotos) => {
+  renderedPhotos.forEach(({id, url, description, comments, likes}) => {
 
-  templatePicture.dataset.pictureId = id;
-  image.src = url;
-  image.alt = description;
-  pictureComments.textContent = comments.length;
-  pictureLikes.textContent = likes;
+    templatePicture.dataset.pictureId = id;
+    image.src = url;
+    image.alt = description;
+    pictureComments.textContent = comments.length;
+    pictureLikes.textContent = likes;
 
-  const thumbnail = templatePicture.cloneNode(true);
+    const thumbnail = templatePicture.cloneNode(true);
 
-  picturesFragment.append(thumbnail);
-});
+    picturesFragment.append(thumbnail);
+  });
 
-containerPictures.append(picturesFragment);
+  containerPictures.append(picturesFragment);
+};
 
-export {containerPictures, photos};
+const clearContainerPictures = () => {
+  containerPictures.querySelectorAll('a.picture').forEach((item) => item.remove());
+};
+
+export {containerPictures, photos, clearContainerPictures, renderPhotos};

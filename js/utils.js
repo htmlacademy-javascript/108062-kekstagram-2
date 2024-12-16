@@ -1,4 +1,5 @@
 const REMOVE_MESSAGE_TIMEOUT = 5000;
+const DEBOUNCE_DELAY = 500;
 
 const errorLoadDataTemplate = document.querySelector('#data-error').content;
 const body = document.querySelector('body');
@@ -28,4 +29,13 @@ const getRandomInteger = (min, max) => {
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-export {getRandomInteger, isEscapeKey, showErrorMessage};
+function debounce (callback, timeoutDelay = DEBOUNCE_DELAY) {
+  let timeoutId;
+
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+}
+
+export {getRandomInteger, isEscapeKey, showErrorMessage, debounce};
