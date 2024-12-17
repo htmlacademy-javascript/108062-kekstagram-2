@@ -86,8 +86,6 @@ const onFileInputChange = () => {
     effectsPreview.forEach((item) => {
       item.style.backgroundImage = `url(${url})`;
     });
-  } else {
-    return;
   }
 };
 
