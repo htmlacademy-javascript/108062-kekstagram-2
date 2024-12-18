@@ -192,8 +192,7 @@ pristine.addValidator(
 pristine.addValidator (
   commentInput,
   (value) => {
-    const hasNumber = value.length <= MAX_COMMENT_SYMBOLS;
-    return hasNumber;
+    return value.length <= MAX_COMMENT_SYMBOLS;
   },
   `длина комментария не может составлять больше ${MAX_COMMENT_SYMBOLS} символов`
 );
