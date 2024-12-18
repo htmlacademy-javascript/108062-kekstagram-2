@@ -191,9 +191,7 @@ pristine.addValidator(
 
 pristine.addValidator (
   commentInput,
-  (value) => {
-    return value.length <= MAX_COMMENT_SYMBOLS;
-  },
+  (value) => value.length <= MAX_COMMENT_SYMBOLS,
   `длина комментария не может составлять больше ${MAX_COMMENT_SYMBOLS} символов`
 );
 
