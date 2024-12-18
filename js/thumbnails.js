@@ -7,6 +7,7 @@ const picturesFragment = document.createDocumentFragment();
 const image = templatePicture.querySelector('.picture__img');
 const pictureComments = templatePicture.querySelector('.picture__comments');
 const pictureLikes = templatePicture.querySelector('.picture__likes');
+const filterElement = document.querySelector('.img-filters');
 
 const photos = await getData()
   .then((data) => data)
@@ -15,18 +16,22 @@ const photos = await getData()
   });
 
 const renderPhotos = (renderedPhotos) => {
-  renderedPhotos.forEach(({id, url, description, comments, likes}) => {
+  if (renderedPhotos) {
+    renderedPhotos.forEach(({id, url, description, comments, likes}) => {
 
-    templatePicture.dataset.pictureId = id;
-    image.src = url;
-    image.alt = description;
-    pictureComments.textContent = comments.length;
-    pictureLikes.textContent = likes;
+      templatePicture.dataset.pictureId = id;
+      image.src = url;
+      image.alt = description;
+      pictureComments.textContent = comments.length;
+      pictureLikes.textContent = likes;
 
-    const thumbnail = templatePicture.cloneNode(true);
+      const thumbnail = templatePicture.cloneNode(true);
 
-    picturesFragment.append(thumbnail);
-  });
+      picturesFragment.append(thumbnail);
+    });
+  } else {
+    filterElement.classList.add('img-filters--inactive');
+  }
 
   containerPictures.append(picturesFragment);
 };
