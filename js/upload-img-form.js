@@ -15,10 +15,12 @@ const img = uploadForm.querySelector('.img-upload__preview img');
 const scaleControl = uploadForm.querySelector('.scale__control--value');
 const imgUploadSubmitButton = uploadForm.querySelector('.img-upload__submit');
 const effects = document.querySelector('.effects');
+const effectsPreview = effects.querySelectorAll('.effects__preview');
 const templateSuccess = document.querySelector('#success').content;
 const templateError = document.querySelector('#error').content;
 const effectLevel = document.querySelector('.img-upload__effect-level');
 
+const FILE_TYPES = ['.jpg', '.jpeg', '.png'];
 const MAX_COMMENT_SYMBOLS = 140;
 const MAX_HASHTAG_SYMBOLS = 20;
 const MAX_HASHTAGS = 5;
@@ -70,6 +72,21 @@ const openUploadModal = () => {
     imgEditorResetBtn.addEventListener('click', onImgEditorResetBtnClick);
     effects.addEventListener('change', onEffectsChange);
   });
+};
+
+const onFileInputChange = () => {
+  const file = uploadFileInput.files[0];
+  const fileName = file.name.toLowerCase();
+
+  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
+
+  if (matches) {
+    const url = URL.createObjectURL(file);
+    img.src = url;
+    effectsPreview.forEach((item) => {
+      item.style.backgroundImage = `url(${url})`;
+    });
+  }
 };
 
 const pristine = new Pristine(uploadForm, {
@@ -198,5 +215,6 @@ const onImgScaleBiggerClick = () => {
 hashtagInput.addEventListener('input', onHashtagInput);
 imgScaleSmaller.addEventListener('click', onImgScaleSmallerClick);
 imgScaleBigger.addEventListener('click', onImgScaleBiggerClick);
+uploadFileInput.addEventListener('change', onFileInputChange);
 
 export {openUploadModal, closeImgEditor, setUploadFormSubmit};
