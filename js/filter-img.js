@@ -50,9 +50,9 @@ function applyFilter () {
   debounceRender(filteredPictures);
 }
 
-const configFilter = () => {
+const activateFilters = () => {
   filterElement.classList.remove('img-filters--inactive');
   filterElement.addEventListener('click', onFilterClick);
 };
 
-export {configFilter};
+export {activateFilters};

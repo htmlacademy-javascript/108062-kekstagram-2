@@ -3,6 +3,12 @@ import {onEffectsChange} from './img-effects-slider.js';
 import {sendData} from './api.js';
 import {appendNotification} from './notification.js';
 
+const FILE_TYPES = ['.jpg', '.jpeg', '.png'];
+const MAX_COMMENT_SYMBOLS = 140;
+const MAX_HASHTAG_SYMBOLS = 20;
+const MAX_HASHTAGS = 5;
+const SCALE_STEP = 0.25;
+
 const uploadForm = document.querySelector('.img-upload__form');
 const uploadFileInput = uploadForm.querySelector('#upload-file');
 const imgEditorForm = uploadForm.querySelector('.img-upload__overlay');
@@ -20,16 +26,10 @@ const templateSuccess = document.querySelector('#success').content;
 const templateError = document.querySelector('#error').content;
 const effectLevel = document.querySelector('.img-upload__effect-level');
 
-const FILE_TYPES = ['.jpg', '.jpeg', '.png'];
-const MAX_COMMENT_SYMBOLS = 140;
-const MAX_HASHTAG_SYMBOLS = 20;
-const MAX_HASHTAGS = 5;
-const SCALE_STEP = 0.25;
-
 let errorMessage = '';
 let imgScale = 1;
 
-const error = () => errorMessage;
+const getErrorMessage = () => errorMessage;
 
 const onImgEditorResetBtnClick = (evt) => {
   evt.preventDefault();
@@ -61,7 +61,8 @@ function closeImgEditor () {
   effectLevel.classList.add('hidden');
   img.style.filter = 'none';
   uploadForm.reset();
-  changeImgScale(imgScale = 1);
+  imgScale = 1;
+  changeImgScale();
 }
 
 const openUploadModal = () => {
@@ -186,7 +187,7 @@ const onHashtagInput = () => {
 pristine.addValidator(
   hashtagInput,
   isHashtagsValid,
-  error
+  getErrorMessage
 );
 
 pristine.addValidator (
